@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizador de Leituras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 700px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        input, select, textarea, button {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .book-list {
+            margin-top: 20px;
+        }
+        .book-item {
+            background: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border-left: 10px solid;
+        }
+        .book-item span {
+            font-weight: bold;
+        }
+        .book-item .delete-btn {
+            background: #e74c3c;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            align-self: flex-start;
+        }
+        .book-item .delete-btn:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Organizador de Leituras</h1>
+        <form id="book-form">
+            <input type="text" id="book-title" placeholder="Título do Livro" required>
+            <input type="text" id="book-author" placeholder="Autor do Livro" required>
+            <input type="number" id="book-pages" placeholder="Quantidade de Páginas" min="1" required>
+            <select id="book-cover-color" required>
+                <option value="" disabled selected>Selecione uma cor de capa</option>
+                <option value="blue">Azul</option>
+                <option value="red">Vermelha</option>
+                <option value="green">Verde</option>
+                <option value="yellow">Amarela</option>
+                <option value="purple">Roxa</option>
+            </select>
+            <input type="number" id="book-rating" placeholder="Avaliação (1 a 5 estrelas)" min="1" max="5" required>
+            <textarea id="book-notes" placeholder="Notas sobre o livro (opcional)" rows="4"></textarea>
+            <button type="submit">Adicionar Livro</button>
+        </form>
+        <div class="book-list" id="book-list">
+            <h2>Lista de Livros</h2>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('book-form');
+        const bookList = document.getElementById('book-list');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Pegando os valores dos inputs
+            const title = document.getElementById('book-title').value;
+            const author = document.getElementById('book-author').value;
+            const pages = document.getElementById('book-pages').value;
+            const coverColor = document.getElementById('book-cover-color').value;
+            const rating = document.getElementById('book-rating').value;
+            const notes = document.getElementById('book-notes').value;
+
+            // Criando o elemento de livro
+            const bookItem = document.createElement('div');
+            bookItem.classList.add('book-item');
+            bookItem.style.borderColor = coverColor; // Adiciona a cor da capa
+            bookItem.innerHTML = `
+                <span>Título:</span> ${title}
+                <span>Autor:</span> ${author}
+                <span>Páginas:</span> ${pages}
+                <span>Avaliação:</span> ${'★'.repeat(rating)} (${rating} estrelas)
+                <span>Notas:</span> ${notes || "Sem notas adicionais"}
+                <button class="delete-btn">Remover</button>
+            `;
+
+            // Adicionando o livro na lista
+            bookList.appendChild(bookItem);
+
+            // Limpando o formulário
+            form.reset();
+
+            // Evento de remover livro
+            const deleteBtn = bookItem.querySelector('.delete-btn');
+            deleteBtn.addEventListener('click', () => {
+                bookList.removeChild(bookItem);
+            });
+        });
+    </script>
+</body>
+</html>
